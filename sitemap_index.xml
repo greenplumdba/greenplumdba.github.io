@@ -1,219 +1,218 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://greenplumdba.github.io/index.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_video.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_analyzedb.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_createdb.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_createuser.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_dropdb.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_dropuser.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpactivatestandby.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpaddmirrors.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpbackup_manager.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpbackup.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpcheckcat.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpcheckperf.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpconfig.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpcopy.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpdeletesystem.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpexpand.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpfdist.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpinitstandby.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpinitsystem.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpkafka.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpload.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gplogfilter.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpmapreduce.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpmapreduce.yaml.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpmemreport.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpmemwatcher.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpmovemirrors.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpmt.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gppkg.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gprecoverseg.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpreload.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gprestore.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpscp.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpss.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpssh.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpssh-exkeys.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpstart.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpstate.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpstop.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_pg_config.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_pg_dump.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_pg_dumpall.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_pg_restore.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_pgbouncer.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_pgbouncer.ini.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_pgbouncer-admin.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_plcontainer.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_plcontainer Configuration File.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_psql.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_reindexdb.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_vacuumdb.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_developer_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_admin_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpcc_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_daily_usable_admin.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_daily_usable_admin_scripts.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_daily_usable_developer.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/page_in_progress.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/index.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_video.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_developer_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_admin_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_gpcc_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_daily_usable_admin.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_daily_usable_admin_scripts.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_daily_usable_developer.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/page_in_progress.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_interview_questions.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_jobs.html</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/assets/gpdocs/PivotalLifecycleMatrix.pdf</loc>
-  </url>
-  <url>
-    <loc>https://greenplumdba.github.io/gpdb_dba_profile.html</loc>
-  </url>
+<url>
+<loc>https://greenplumdba.github.io/index.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_video.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_analyzedb.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_createdb.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_createuser.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_dropdb.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_dropuser.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpactivatestandby.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpaddmirrors.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpbackup_manager.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpbackup.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpcheckcat.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpcheckperf.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpconfig.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpcopy.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpdeletesystem.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpexpand.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpfdist.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpinitstandby.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpinitsystem.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpkafka.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpload.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gplogfilter.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpmapreduce.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpmapreduce.yaml.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpmemreport.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpmemwatcher.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpmovemirrors.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpmt.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gppkg.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gprecoverseg.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpreload.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gprestore.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpscp.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpss.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpssh.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpssh-exkeys.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpstart.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpstate.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpstop.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_pg_config.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_pg_dump.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_pg_dumpall.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_pg_restore.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_pgbouncer.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_pgbouncer.ini.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_pgbouncer-admin.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_plcontainer.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_plcontainer Configuration File.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_psql.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_reindexdb.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_vacuumdb.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_developer_docs.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_admin_docs.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpcc_docs.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_daily_usable_admin.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_daily_usable_admin_scripts.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_daily_usable_developer.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/page_in_progress.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/index.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_video.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_developer_docs.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_admin_docs.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_gpcc_docs.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_daily_usable_admin.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_daily_usable_admin_scripts.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_daily_usable_developer.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/page_in_progress.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_interview_questions.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_jobs.html</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/assets/gpdocs/PivotalLifecycleMatrix.pdf</loc>
+</url>
+<url>
+<loc>https://greenplumdba.github.io/gpdb_dba_profile.html</loc>
+</url>
 </urlset>
