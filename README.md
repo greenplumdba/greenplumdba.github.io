@@ -1,8 +1,6 @@
 
 # Greenplum DBA
 
-https://greenplumdba.org/
-
 https://greenplumdba.github.io/
 
 Greenplum is a massively parallel processing (MPP) database that is designed to handle large-scale data warehousing and analytics workloads. A Greenplum DBA (database administrator) is responsible for managing and maintaining the Greenplum database environment.
