@@ -1,0 +1,79 @@
+--------------------------------------------------------
+Session - 3_1
+--------------------------------------------------------
+
+Overview of Master Mirroring
+--------------------------------------------------------
+You can deploy a backup or mirror of the master instance on a separate host machine. The backup master instance, called the standby master, serves as a warm standby if the primary master becomes nonoperational.
+
+Ref :- https://gpdb.docs.pivotal.io/6-3/admin_guide/highavail/topics/g-overview-of-master-mirroring.html
+
+#Adds and/or initializes a standby master host for a Greenplum Database system.
+--------------------------------------------------------
+
+Prepare the host as we did in the first session.
+
+Update the \etc\hosts file on all master and segment host with IP of Standby 
+
+#gpinitstandby
+--------------------------------------------------------
+The gpinitstandby utility adds a backup, standby master host to your Greenplum Database system. If your system has an existing standby master host configured, use the -r option to remove it before adding the new standby master host.
+
+Ref :- https://docs.vmware.com/en/VMware-Tanzu-Greenplum/5/greenplum-database/GUID-utility_guide-admin_utilities-gpinitstandby.html
+
+1. Initializes standby
+--------------------------------------------------------
+gpinitstandby -s standby
+
+
+--------------------------------------------------------
+2. Recovery Failed Standby
+--------------------------------------------------------
+
+#Monitor sync via
+--------------------------------------------------------
+gpstate -f
+
+#remove the standby
+--------------------------------------------------------
+gpinitstandby -r standby
+
+Note: After fixing Host add the standby again
+
+#add the standby again
+--------------------------------------------------------
+gpinitstandby -s standby
+
+#Monitor sync via
+--------------------------------------------------------
+gpstate -f
+
+
+--------------------------------------------------------
+3. Recover Failed Master host
+--------------------------------------------------------
+
+#Activate the standby to run as master host
+--------------------------------------------------------
+gpactivatestandby
+
+Note: To be Execute on active master/standby host
+
+#add master(failed) host as the standby to standby(current running master)
+--------------------------------------------------------
+gpinitstandby -s master
+
+#Monitor sync via
+--------------------------------------------------------
+gpstate -f
+
+#Bring Down the standby host
+--------------------------------------------------------
+reboot or shutdown
+
+#Activate the master host to run as gp master (preferred role)
+--------------------------------------------------------
+gpactivatestandby
+
+Follow the Above procedure to add the standby host again as standby 
+

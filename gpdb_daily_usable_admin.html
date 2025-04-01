@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Daily Usable Admin - Greenplum DBA</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/logo.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+<!-- Nice Admin -->
+</head>
+
+<body>
+
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-right justify-content-between">
+      <i class="bi bi-list toggle-sidebar-btn align-items-center"></i>&nbsp;&nbsp;
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="desktop-text" style="color: #012970; font-family: 'Ubuntu';">&nbsp;Greenplum DBA</span><span class="mobile-text" style="color: #012970; font-family: 'Ubuntu';">GPDBA</span>
+      </a>
+    </div><!-- End Logo -->
+    <nav class="header-nav ms-auto">
+    </nav><!-- End Icons Navigation -->
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <script>
+    $(function(){
+      $("#sidebar").load("gpdb_aside.html");
+    });
+    </script>
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+  </aside><!-- End Sidebar-->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchDataAndAppendmu();
+    });
+  </script>
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Daily Usable</h1>
+      <hr>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">Daily Usable</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <hr>
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-6" style="width: auto;">
+          <div class="card" style="width: auto;">
+            <div class="card-body" style="width: auto; text-align: left;">
+                <br>
+                <pre>
+                  -------------------------------------------------------------------------------------------------------------------
+                  | Greenplum Database Daily Commands Template (Including DBA Tasks)                                                |
+                  -------------------------------------------------------------------------------------------------------------------
+                  
+                  1. **Connecting to the Database:**
+                     - Connect to a database:
+                       ```
+                       psql -h &lt;hostname&gt; -p &lt;port&gt; -d &lt;database&gt; -U &lt;username&gt;
+                       ```
+                  
+                  2. **Basic Queries:**
+                     - Execute a SQL query:
+                       ```sql
+                       SELECT * FROM &lt;table&gt;;
+                       ```
+                  
+                  3. **Database Information:**
+                     - Show database version:
+                       ```sql
+                       SELECT version();
+                       ```
+                  
+                     - Display database information:
+                       ```sql
+                       \l
+                       ```
+                  
+                     - Display table structure:
+                       ```sql
+                       \d+ &lt;table&gt;;
+                       ```
+                  
+                  4. **Data Manipulation:**
+                     - Insert data into a table:
+                       ```sql
+                       INSERT INTO &lt;table&gt; (column1, column2, ...) VALUES (value1, value2, ...);
+                       ```
+                  
+                     - Update data in a table:
+                       ```sql
+                       UPDATE &lt;table&gt; SET column1 = value1 WHERE condition;
+                       ```
+                  
+                     - Delete data from a table:
+                       ```sql
+                       DELETE FROM &lt;table&gt; WHERE condition;
+                       ```
+                  
+                  5. **Backup and Restore:**
+                     - Backup a database:
+                       ```
+                       pg_dump -h &lt;hostname&gt; -p &lt;port&gt; -U &lt;username&gt; -F c -b -v -f &lt;backup_file&gt; &lt;database&gt;
+                       ```
+                  
+                     - Restore a database:
+                       ```
+                       pg_restore -h &lt;hostname&gt; -p &lt;port&gt; -U &lt;username&gt; -d &lt;database&gt; -v &lt;backup_file&gt;
+                       ```
+                  
+                  6. **Monitoring and Maintenance:**
+                     - View current queries:
+                       ```sql
+                       SELECT * FROM pg_stat_activity;
+                       ```
+                  
+                     - Vacuum a table:
+                       ```sql
+                       VACUUM &lt;table&gt;;
+                       ```
+                  
+                     - Check disk space usage:
+                       ```
+                       df -h
+                       ```
+                  
+                     - Check Greenplum disk space usage:
+                       ```sql
+                       SELECT * FROM gp_toolkit.gp_disk_free;
+                       ```
+                  
+                  7. **Indexing:**
+                     - Create an index:
+                       ```sql
+                       CREATE INDEX &lt;index_name&gt; ON &lt;table&gt; (column1, column2, ...);
+                       ```
+                  
+                     - Drop an index:
+                       ```sql
+                       DROP INDEX &lt;index_name&gt;;
+                       ```
+                  
+                  8. **User Management:**
+                     - Create a user:
+                       ```sql
+                       CREATE USER &lt;username&gt; WITH PASSWORD '&lt;password&gt;';
+                       ```
+                  
+                     - Grant privileges:
+                       ```sql
+                       GRANT ALL PRIVILEGES ON DATABASE &lt;database&gt; TO &lt;username&gt;;
+                       ```
+                  
+                     - Revoke privileges:
+                       ```sql
+                       REVOKE ALL PRIVILEGES ON &lt;table&gt; FROM &lt;username&gt;;
+                       ```
+                  
+                  9. **Database Administration:**
+                     - Check Greenplum configuration:
+                       ```sql
+                       SHOW ALL;
+                       ```
+                  
+                     - Check cluster status:
+                       ```sql
+                       SELECT * FROM gp_toolkit.gp_configuration_check();
+                       ```
+                  
+                     - Start/Stop Greenplum:
+                       ```
+                       gpstart
+                       gpstop
+                       ```
+                  
+                     - Restart Greenplum segments:
+                       ```
+                       gpstop -r
+                       ```
+                  
+                     - Check Greenplum logs:
+                       ```
+                       cd $MASTER_DATA_DIRECTORY/pg_log
+                       tail -f postgresql.log
+                       ```
+                  
+                     - Check and repair the Greenplum catalog:
+                       ```
+                       gpcrondump -a
+                       gprestore -a
+                       ```
+                  
+                  10. **Security:**
+                      - Change user password:
+                        ```sql
+                        ALTER USER &lt;username&gt; WITH PASSWORD '&lt;new_password&gt;';
+                        ```
+                  
+                      - View user privileges:
+                        ```sql
+                        \du
+                        \dp &lt;table&gt;
+                        ```
+                  
+                  11. **Database Management:**
+                      - Start Greenplum Database:
+                        ```
+                        gpstart
+                        ```
+                  
+                      - Stop Greenplum Database:
+                        ```
+                        gpstop
+                        ```
+                  
+                      - Recover a failed segment:
+                        ```
+                        gpactivatestandby -d /data/primary -D /data/mirror
+                        ```
+                  
+                      - Rebalance a Greenplum Database:
+                        ```
+                        gprebalance -D /data -a
+                        ```
+                  
+                  12. **Blocking and Termination:**
+                      - Identify blocking queries:
+                        ```sql
+                        SELECT * FROM pg_stat_activity WHERE state = 'active' AND waiting = 't';
+                        ```
+                  
+                      - Terminate a blocking query:
+                        ```sql
+                        SELECT pg_terminate_backend(&lt;pid&gt;);
+                        ```
+                  
+                  13. **Table Bloat:**
+                      - Check table bloat:
+                        ```sql
+                        SELECT schemaname, tablename, pg_size_pretty(pg_total_relation_size('"' || schemaname || '"."' || tablename || '"')) AS total_size, pg_size_pretty(pg_total_relation_size('"' || schemaname || '"."' || tablename || '"') - pg_relation_size('"' || schemaname || '"."' || tablename || '"')) AS bloat_size FROM pg_tables WHERE pg_total_relation_size('"' || schemaname || '"."' || tablename || '"') - pg_relation_size('"' || schemaname || '"."' || tablename || '"') > 0;
+                        ```
+                  
+                  -------------------------------------------------------------------------------------------------------------------
+                  </pre>
+              <!-- End Table with stripped rows -->
+              <h3 class="card-title" style="padding: 5px 0 5px 0;font-size: 16px;"> Official VMware Link <a href="https://docs.vmware.com/en/VMware-Tanzu-Greenplum/index.html"> VMware Greenplum Database<a></h3>
+              <h3 class="card-title" style="padding: 5px 0 5px 0;font-size: 16px;"> Official Github Link <a href="https://github.com/greenplum-db/gpdb"> Greenplum Database Open Source<a></h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Greenplum DBA 2023</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      Designed by <a href="https://www.linkedin.com/in/kishan-panchal-6004ab1b4/">@Kishan Panchal</a>&nbsp;&nbsp;<i class="bi bi-plus-square-fill"></i>&nbsp;  
+      With the help of ChatGPT by <img src="assets/img/icons8-chatgpt-24.png" alt="ChatGPT Icon"> OpenAI.
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

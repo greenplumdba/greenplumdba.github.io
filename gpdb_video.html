@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Video's - Greenplum DBA</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/logo.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+  <!-- Vendor CSS Files -->
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <style>
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      /* 16:9 aspect ratio */
+      height: 0;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .video-container {
+        padding-bottom: 75%;
+        /* 4:3 aspect ratio for mobile */
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-right justify-content-between">
+      <i class="bi bi-list toggle-sidebar-btn align-items-center"></i>&nbsp;&nbsp;
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="desktop-text" style="color: #012970; font-family: 'Ubuntu';">&nbsp;Greenplum DBA</span><span
+          class="mobile-text" style="color: #012970; font-family: 'Ubuntu';">GPDBA</span>
+      </a>
+    </div><!-- End Logo -->
+    <nav class="header-nav ms-auto">
+    </nav><!-- End Icons Navigation -->
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <script>
+    $(function () {
+      $("#sidebar").load("gpdb_aside.html");
+    });
+  </script>
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+  </aside><!-- End Sidebar-->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchDataAndAppendmu();
+      fetchVideoDataAndAppendmu();
+    });
+  </script>
+
+  <script>
+    function fetchVideoDataAndAppendmu() {
+      const googleSheetURL = 'https://opensheet.elk.sh/11BO5j-M4Id8shovnAYKOhdSU4-oQDUeoih95CqAaITo/Videos';
+      const adminAccordionExample = document.getElementById('adminAccordionExample');
+      const developerAccordionExample = document.getElementById('developerAccordionExample');
+
+      fetch(googleSheetURL)
+        .then(response => response.json())
+        .then(data => {
+          data.forEach((row, index) => {
+            const videoFor = row.Video_For; // Assuming this is the column name for the admin/developer divide
+            const videoTitle = row.Video_Title;
+            const videoURL = row.Video_URL;
+            const tutorialDocumentURL = row.Tutorial_Document_URL;
+
+            // Check if video title and URL are available
+            if (!videoTitle || !videoURL) {
+              return; // Skip if video title or URL is not available
+            }
+
+            // Create accordion item
+            const accordionItem = document.createElement('div');
+            accordionItem.className = 'accordion-item';
+
+            // Create accordion header
+            const accordionHeader = document.createElement('h2');
+            accordionHeader.className = 'accordion-header';
+
+            // Create accordion button
+            const accordionButton = document.createElement('button');
+            accordionButton.className = 'accordion-button collapsed';
+            accordionButton.type = 'button';
+            accordionButton.setAttribute('data-bs-toggle', 'collapse');
+            accordionButton.setAttribute('data-bs-target', `#collapse${index}`);
+            accordionButton.setAttribute('aria-expanded', 'false');
+            accordionButton.setAttribute('aria-controls', `collapse${index}`);
+            accordionButton.textContent = videoTitle;
+
+            // Create accordion collapse
+            const accordionCollapse = document.createElement('div');
+            accordionCollapse.id = `collapse${index}`;
+            accordionCollapse.className = 'accordion-collapse collapse';
+            accordionCollapse.setAttribute('aria-labelledby', `heading${index}`);
+            accordionCollapse.setAttribute('data-bs-parent', '#accordionExample');
+
+            // Create accordion body
+            const accordionBody = document.createElement('div');
+            accordionBody.className = 'accordion-body position-relative';
+            accordionBody.style.overflow = 'auto'; // Add this line to enable scrolling
+
+            // Create video container
+            const videoContainer = document.createElement('div');
+            videoContainer.className = 'video-container';
+
+            // Create iframe for video
+            const iframe = document.createElement('iframe');
+            iframe.src = videoURL;
+            iframe.frameBorder = '0';
+            iframe.allowFullscreen = true;
+
+            // Append iframe to video container
+            videoContainer.appendChild(iframe);
+
+            // Append video container to accordion body
+            accordionBody.appendChild(videoContainer);
+
+            // Check if tutorial document URL is available before creating the button
+            if (tutorialDocumentURL && tutorialDocumentURL.trim() !== '') {
+              // Create download tutorial document button
+              const downloadButton = document.createElement('a');
+              downloadButton.className = 'btn btn-primary';
+              downloadButton.href = tutorialDocumentURL;
+              downloadButton.textContent = 'Download Tutorial Document';
+              downloadButton.target = '_blank'; // Open in a new tab
+
+              // Create line breaks before and after the button
+              const br1 = document.createElement('br');
+              const br2 = document.createElement('br');
+
+              // Append line breaks and download button to accordion body
+              accordionBody.appendChild(br1);
+              accordionBody.appendChild(downloadButton);
+            }
+
+            // Append accordion body to accordion collapse
+            accordionCollapse.appendChild(accordionBody);
+
+            // Append accordion collapse to accordion item
+            accordionItem.appendChild(accordionCollapse);
+
+            // Append accordion button to accordion header
+            accordionHeader.appendChild(accordionButton);
+
+            // Append accordion header to accordion item
+            accordionItem.appendChild(accordionHeader);
+
+            // Append accordion item to the appropriate accordion example based on the admin/developer divide
+            if (videoFor.toLowerCase() === 'admin') {
+              adminAccordionExample.appendChild(accordionItem);
+            } else if (videoFor.toLowerCase() === 'developer') {
+              developerAccordionExample.appendChild(accordionItem);
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching data from Google Sheets:', error);
+        });
+    }
+  </script>
+  
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>GPDB Youtube Video</h1>
+      <hr>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">GPDB Youtube Video</li>
+        </ol>
+      </nav>
+      <hr>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
+        <div class="card">
+          <div class="card-body">
+            <!-- Admin Accordion -->
+            <div class="accordion" id="adminAccordionExample">
+              <h5 class="card-title">For Admin</h5>
+              <!-- Admin Accordion items will be dynamically added here -->
+            </div><!-- End Admin Accordion Example -->
+
+            <!-- Developer Accordion -->
+            <div class="accordion" id="developerAccordionExample">
+              <h5 class="card-title">For Developer</h5>
+              <!-- Developer Accordion items will be dynamically added here -->
+            </div><!-- End Developer Accordion Example -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Greenplum DBA 2023</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      Designed by <a href="https://www.linkedin.com/in/kishan-panchal-6004ab1b4/">@Kishan Panchal</a>&nbsp;&nbsp;<i
+        class="bi bi-plus-square-fill"></i>&nbsp;
+      With the help of ChatGPT by <img src="assets/img/icons8-chatgpt-24.png" alt="ChatGPT Icon"> OpenAI.
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

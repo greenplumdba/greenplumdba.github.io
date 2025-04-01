@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Contributers - Greenplum DBA</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/logo.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <!-- Nice Admin -->
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-right justify-content-between">
+      <i class="bi bi-list toggle-sidebar-btn align-items-center"></i>&nbsp;&nbsp;
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="desktop-text" style="color: #012970; font-family: 'Ubuntu';">&nbsp;Greenplum DBA</span><span
+          class="mobile-text" style="color: #012970; font-family: 'Ubuntu';">GPDBA</span>
+      </a>
+    </div><!-- End Logo -->
+    <nav class="header-nav ms-auto">
+    </nav><!-- End Icons Navigation -->
+  </header><!-- End Header -->
+
+  <script>
+    $(function () {
+      $("#sidebar").load("gpdb_aside.html");
+    });
+  </script>
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+  </aside><!-- End Sidebar-->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchDataAndAppendmu();
+    });
+  </script>
+
+  <main id="main" class="main">
+    <style>
+      /* Profile Card Styles */
+      .profile-card {
+        margin-bottom: 20px;
+        /* Adjust as needed for spacing between cards */
+      }
+
+      /* Profile Card Image Styles */
+      .profile-card img {
+        width: 100px;
+        /* Adjust image size as needed */
+        height: 100px;
+        border-radius: 50%;
+      }
+
+      /* Profile Card Body Styles */
+      .profile-card .card-body {
+        background-color: #f0f0f0;
+        /* Change this to your desired background color */
+        padding: 20px;
+        /* Adjust padding as needed */
+        position: relative;
+        /* Position relative for absolute positioning of crown */
+      }
+
+      /* Crown Styles */
+      .crown {
+        position: absolute;
+        top: -10px;
+        /* Adjust as needed to position the crown */
+        left: -10px;
+        /* Adjust as needed to position the crown */
+        background-color: gold;
+        /* Crown color */
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+
+      /* Tag Styles */
+      .tag {
+        background-color: silver;
+        /* Tag color */
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        position: absolute;
+        bottom: -10px;
+        /* Adjust as needed to position the tag */
+        right: -10px;
+        /* Adjust as needed to position the tag */
+      }
+
+      /* Additional tag styles */
+      .tag.gold {
+        background-color: goldenrod;
+        /* Gold tag color */
+      }
+
+      .tag.platinum {
+        background-color: #6c757d;
+        /* Platinum tag color */
+      }
+    </style>
+
+    <div class="pagetitle">
+      <hr>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">Contributers</li>
+        </ol>
+      </nav>
+      <hr>
+    </div><!-- End Page Title -->
+    <section class="section profile">
+      <div class="row">
+        <div class="col-xl-4">
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <span class="crown">Platinum</span>
+              <img src="assets/img/photo_gurupreet_bhatia.jpg" alt="Profile" class="rounded-circle">
+              <h2>Gurupreet Bhatia</h2>
+              <h3>Lead Greenplum DBA</h3>
+              <div class="social-links mt-2">
+                <a href="https://www.linkedin.com/in/gurupreet-singh-bhatia-734a2993/" class="linkedin"><i
+                    class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Card: Kishan Panchal -->
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <span class="crown">Platinum</span>
+              <img src="assets/img/photo_kishan_panchal.jpg" alt="Profile" class="rounded-circle">
+              <h2>Kishan Panchal</h2>
+              <h3>Senior Greenplum DBA</h3>
+              <div class="social-links">
+                <a href="https://www.linkedin.com/in/kishan-panchal-6004ab1b4/" class="linkedin"><i
+                    class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Card: Huzefa Patel -->
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <span class="crown">Platinum</span>
+              <img src="assets/img/photo_huzefa_patel.jpg" alt="Profile" class="rounded-circle">
+              <h2>Huzefa Patel</h2>
+              <h3>Lead Greenplum DBA</h3>
+              <div class="social-links">
+                <a href="https://www.linkedin.com/in/huzefa-patel-373bb244/" class="linkedin"><i
+                    class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+
+          <!-- Profile Card: Bharat D -->
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <span class="crown">Platinum</span>
+              <img src="assets/img/photo_bharat_devrajan.jpg" alt="Profile" class="rounded-circle">
+              <h2>Bharat D</h2>
+              <h3>Senior Greenplum DBA</h3>
+              <div class="social-links">
+                <a href="https://www.linkedin.com/in/bharath-d-263b17202/" class="linkedin"><i
+                    class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Card: Jitendra Lodwal -->
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <span class="crown">Platinum</span>
+              <img src="assets/img/photo_jitendra_lodwa.jpg" alt="Profile" class="rounded-circle">
+              <h2>Jitendra Lodwal</h2>
+              <h3>Lead Greenplum Architect</h3>
+              <div class="social-links">
+                <a href="https://www.linkedin.com/in/jitendra-l-4490a917/" class="linkedin"><i
+                    class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Card: Vishal Kadam -->
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <span class="crown">Platinum</span>
+              <img src="assets/img/photo_vishal_kadam.jpg" alt="Profile" class="rounded-circle">
+              <h2>Vishal Kadam</h2>
+              <h3>Lead Greenplum DBA</h3>
+              <div class="social-links">
+                <a href="https://www.linkedin.com/in/vishal-kadam-9ab2651a/" class="linkedin"><i
+                    class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main><!-- End #main -->
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Greenplum DBA 2023</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      Designed by <a href="https://www.linkedin.com/in/kishan-panchal-6004ab1b4/">@Kishan Panchal</a>&nbsp;&nbsp;<i
+        class="bi bi-plus-square-fill"></i>&nbsp;
+      With the help of ChatGPT by <img src="assets/img/icons8-chatgpt-24.png" alt="ChatGPT Icon"> OpenAI.
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+--------------------------------------------------------
+Session - 1 
+--------------------------------------------------------
+
+Install VMware Workstation
+Download RHEL - https://developers.redhat.com/products/rhel/download
+
+Tools Used
+--------------------------------------------------------
+putty 
+winscp
+notepad++
+
+Check out for more details - https://greenplum.docs.pivotal.io/6-3/install_guide/install_gpdb.html
+
+#Register the System to Red-hat
+--------------------------------------------------------
+subscription-manager register --username k.software.services --password G@mers1234 --auto-attach
+
+# Execute as root on each host as root
+--------------------------------------------------------
+sudo hostnamectl set-hostname master
+sudo hostnamectl set-hostname seg1
+sudo hostnamectl set-hostname seg2
+sudo hostnamectl set-hostname seg3
+sudo hostnamectl set-hostname seg4
+
+#Quickly Install Other Segments VM's
+
+# Edit /etc/hosts file Every HOST as root
+
+Note: Change as per requirement below parameter could differ from diffrent clusters 
+
+list IP Address -> hostname -I
+
+--------------------------------------------------------
+192.168.206.147 master master
+192.168.206.143 seg1 seg1
+192.168.206.144 seg2 seg2
+192.168.206.145 seg3 seg3
+192.168.206.146 seg4 seg4
+
+# Edit ->>> vi /etc/sysctl.conf as root
+--------------------------------------------------------
+
+# kernel.shmall = _PHYS_PAGES / 2 # See Shared Memory Pages
+kernel.shmall = 197951838
+# kernel.shmmax = kernel.shmall * PAGE_SIZE 
+kernel.shmmax = 810810728448
+kernel.shmmni = 4096
+vm.overcommit_memory = 2 # See Segment Host Memory
+vm.overcommit_ratio = 95 # See Segment Host Memory
+
+net.ipv4.ip_local_port_range = 10000 65535 # See Port Settings
+kernel.sem = 250 2048000 200 8192
+kernel.sysrq = 1
+kernel.core_uses_pid = 1
+kernel.msgmnb = 65536
+kernel.msgmax = 65536
+kernel.msgmni = 2048
+net.ipv4.tcp_syncookies = 1
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv4.tcp_max_syn_backlog = 4096
+net.ipv4.conf.all.arp_filter = 1
+net.core.netdev_max_backlog = 10000
+net.core.rmem_max = 2097152
+net.core.wmem_max = 2097152
+vm.swappiness = 10
+vm.zone_reclaim_mode = 0
+vm.dirty_expire_centisecs = 500
+vm.dirty_writeback_centisecs = 100
+vm.dirty_background_ratio = 0 # See System Memory
+vm.dirty_ratio = 0
+vm.dirty_background_bytes = 1610612736
+vm.dirty_bytes = 4294967296
+
+# Edit ->>> vi /etc/security/limits.conf as root
+--------------------------------------------------------
+
+* soft nofile 524288
+* hard nofile 524288
+* soft nproc 131072
+* hard nproc 131072
+
+# Edit ->>> vi /etc/selinux/config as root
+--------------------------------------------------------
+
+SELINUX=disabled
+SELINUXTYPE=targeted 
+
+# Disable FireWall ( Not Suggested on Production )
+--------------------------------------------------------
+systemctl stop firewalld
+systemctl disable firewalld
+
+#Copy all Files to all Segment HOST as root
+--------------------------------------------------------
+scp /etc/hosts root@seg1:/etc
+scp /etc/sysctl.conf root@seg1:/etc
+scp /etc/security/limits.conf root@seg1:/etc/security
+scp /etc/selinux/config root@seg1:/etc/selinux
+
+scp /etc/hosts root@seg2:/etc
+scp /etc/sysctl.conf root@seg2:/etc
+scp /etc/security/limits.conf root@seg2:/etc/security
+scp /etc/selinux/config root@seg2:/etc/selinux
+
+scp /etc/hosts root@seg3:/etc
+scp /etc/sysctl.conf root@seg3:/etc
+scp /etc/security/limits.conf root@seg3:/etc/security
+scp /etc/selinux/config root@seg3:/etc/selinux
+
+scp /etc/hosts root@seg4:/etc
+scp /etc/sysctl.conf root@seg4:/etc
+scp /etc/security/limits.conf root@seg4:/etc/security
+scp /etc/selinux/config root@seg4:/etc/selinux
+
+Same for Rest for HOST
+
+############ Reboot all Master / segment HOST ############ 
+
+#Download Greenplum - 
+--------------------------------------------------------
+From Tanzu VMWare Website - https://network.pivotal.io/products/vmware-tanzu-greenplum
+
+Command ( Note Replace the Token )
+--------------------------------------------------------
+wget -O "greenplum-db-4.3.17.0-rhel5-x86_64.zip"  --post-data="" --header="Authorization: Token _AV4SPrWeyaiADbFBzif" https://network.pivotal.io/api/v2/products/vmware-tanzu-greenplum/releases/7106/product_files/30856/download
+
+
+#Copy the Downloaded GP file to all Segment
+--------------------------------------------------------
+scp /home/gpadmin/greenplum-db-4.3.10.0-build-1-rhel5-x86_64.bin gpadmin@seg1:/home/gpadmin
+
+Same for Rest for HOST
+
+#Install Greenplum on Every Instance as root
+--------------------------------------------------------
+sudo yum install ./greenplum-db-6.22.1-rhel8-x86_64.rpm
+
+#Install on other seg host same way 
+
+cp -r /usr/local/greenplum-db/docs/cli_help/gpconfigs /home/gpadmin
+
+mkdir /usr/local/greenplum-db-4.3.17.0
+
+chown -R gpadmin:gpadmin /home/gpadmin*
+
+source /usr/local/greenplum-db/greenplum_path.sh
+
+chown -R gpadmin:gpadmin /usr/local/greenplum-db-6.22.1
+
+Change as per Requirement 
+################################################
+
+Note: add to bashrc file so dont have to Execute again and again.
+
+vi ~/.bashrc
+vi ~/.bash_profile
+
+ln -sfn /usr/local/greenplum-db-4.3.17.0 greenplum-db
+source /usr/local/greenplum-db-4.3.10.0/greenplum_path.sh
+export MASTER_DATA_DIRECTORY=/home/gpadmin/data/master/gpseg-1
+export PGPORT=5432
+scp ~/.bashrc root@seg2:~/.bashrc
+scp ~/.bash_profile root@seg2:~/.bash_profile
+
+Restart all the Host VM's :) 
+
+################################################
+
+#Pasword Less SSH as GPADMIN
+--------------------------------------------------------
+ssh-keygen -t rsa -b 4096
+ssh-copy-id seg1
+ssh-copy-id seg2
+ssh-copy-id seg3
+ssh-copy-id seg4
+
+--------------------------------------------------------
+
+File >>>>> all_hosts
+--------------------------------------------------------
+master
+seg1
+seg2
+seg3
+seg4
+--------------------------------------------------------
+
+File >>>>> seg_hosts
+--------------------------------------------------------
+seg1
+seg2
+seg3
+seg4
+
+#GP Pasword Less SSH as GPADMIN
+--------------------------------------------------------
+gpssh-exkeys -f all_hosts
+
+#Folders Permissions Execute on each host as GPADMIN ( Architecture could be diffrent as per requirement )
+--------------------------------------------------------
+
+mkdir -p /home/gpadmin/data/master ##On Master Host
+
+#Create Folders on Every Instance as GPADMIN
+--------------------------------------------------------
+gpssh -f seg_hosts -e 'mkdir -p /home/gpadmin/data1/primary'
+gpssh -f seg_hosts -e 'mkdir -p /home/gpadmin/data1/mirror'
+gpssh -f seg_hosts -e 'mkdir -p /home/gpadmin/data2/primary'
+gpssh -f seg_hosts -e 'mkdir -p /home/gpadmin/data2/mirror'
+
+############ CONFIG Files To Make ############
+
+File >>>>> gpinitsystem_config - Please Change as per Architecture
+--------------------------------------------------------
+# FILE NAME: gpinitsystem_config
+
+# Configuration file needed by the gpinitsystem
+
+################################################
+#### REQUIRED PARAMETERS
+################################################
+
+#### Name of this Greenplum system enclosed in quotes.
+ARRAY_NAME="Greenplum Data Platform"
+
+#### Naming convention for utility-generated data directories.
+SEG_PREFIX=gpseg
+
+#### Base number by which primary segment port numbers
+#### are calculated.
+PORT_BASE=6000
+
+#### File system location(s) where primary segment data directories
+#### will be created. The number of locations in the list dictate
+#### the number of primary segments that will get created per
+#### physical host (if multiple addresses for a host are listed in
+#### the hostfile, the number of segments will be spread evenly across
+#### the specified interface addresses).
+declare -a DATA_DIRECTORY=(/home/gpadmin/data1/primary /home/gpadmin/data2/primary)
+
+#### OS-configured hostname or IP address of the master host.
+MASTER_HOSTNAME=master
+
+#### File system location where the master data directory
+#### will be created.
+MASTER_DIRECTORY=/home/gpadmin/data/master
+
+#### Port number for the master instance.
+MASTER_PORT=5432
+
+#### Shell utility used to connect to remote hosts.
+TRUSTED_SHELL=ssh
+
+#### Maximum log file segments between automatic WAL checkpoints.
+CHECK_POINT_SEGMENTS=8
+
+#### Default server-side character set encoding.
+ENCODING=UNICODE
+
+################################################
+#### OPTIONAL MIRROR PARAMETERS
+################################################
+
+#### Base number by which mirror segment port numbers
+#### are calculated.
+MIRROR_PORT_BASE=7000
+
+#### File system location(s) where mirror segment data directories
+#### will be created. The number of mirror locations must equal the
+#### number of primary locations as specified in the
+#### DATA_DIRECTORY parameter.
+declare -a MIRROR_DATA_DIRECTORY=(/home/gpadmin/data1/mirror /home/gpadmin/data2/mirror)
+
+################################################
+#### OTHER OPTIONAL PARAMETERS
+################################################
+
+#### Create a database of this name after initialization.
+DATABASE_NAME=template1
+
+#### Specify the location of the host address file here instead of
+#### with the -h option of gpinitsystem.
+MACHINE_LIST_FILE=/home/gpadmin/hostfile
+
+--------------------------------------------------------
+
+#Init Cluster
+--------------------------------------------------------
+gpinitsystem -c gpinitsystem_config
+
+#Start with Greenplum database
+
+psql postgres
+
+Checkout - https://docs.vmware.com/en/VMware-Tanzu-Greenplum/6/greenplum-database/GUID-landing-index.html
+Checkout for administrator guide - https://gpdb.docs.pivotal.io/6-12/admin_guide/admin_guide.html
+
+
+FLUSH EVERYTHING If anything gone wrong :( :( :( not for PROD
+
+################################################
+
+rm -r -f /home/gpadmin/data/master/*
+gpssh -f segs_host -e 'rm -r -f /home/gpadmin/data*/primary/*'
+gpssh -f segs_host -e 'rm -r -f /home/gpadmin/data*/mirror/*'
+
+################################################
+
+AND Restart VM's

@@ -1,0 +1,133 @@
+--------------------------------------------------------
+Session - 5 
+--------------------------------------------------------
+
+Upgrading from an Earlier Greenplum 6 Release
+--------------------------------------------------------
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+greenplum-db-6.22.1-rhel8 to greenplum-db-6.23.0-rhel8
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Check out for more details - https://greenplum.docs.pivotal.io/6-6/install_guide/upgrading.html
+
+An upgrade from Greenplum Database 6.x to a newer 6.x release involves stopping Greenplum Database, updating the Greenplum Database software binaries, and restarting Greenplum Database.
+
+The upgrade path supported for this release is Greenplum Database 6.x to a newer Greenplum Database 6.x release.
+
+Direct upgrade from Greenplum Database 4 or 5 to Greenplum 6 is not supported.
+
+Prerequisites
+--------------------------------------------------------
+
+Before starting the upgrade process, perform the following checks.
+
+Verify the health of the Greenplum Database host hardware, and verify that the hosts meet the requirements for running Greenplum Database. The Greenplum Database gpcheckperf utility can assist you in confirming the host requirements.
+
+NOTE: If you have configured the Greenplum Platform Extension Framework (PXF) in your previous Greenplum Database installation, you must stop the PXF service, and you might need to back up PXF configuration files before upgrading to a new version of Greenplum Database. 
+
+If you have not yet configured PXF, no action is necessary.
+
+#Check the Current Version
+--------------------------------------------------------
+gpstate -i
+
+else
+
+launch PSQL utility by executing "psql" command.
+
+select version();
+
+Perform a smart shutdown of your Greenplum Database 6.x system (there can be no active connections to the database). This example uses the -a option to disable confirmation prompts:
+--------------------------------------------------------
+gpstop -a
+
+Copy the new Greenplum Database software installation package to the gpadmin user's home directory on each master, standby, and segment host.
+As root, install the new Greenplum Database software release on each host. For example, on RHEL/CentOS systems:
+--------------------------------------------------------
+
+#Download Greenplum - 
+--------------------------------------------------------
+From Tanzu VMWare Website - https://network.pivotal.io/products/vmware-tanzu-greenplum
+
+Command ( Note Replace the Token )
+--------------------------------------------------------
+
+wget -O "greenplum-db-6.23.0-rhel8-x86_64.rpm"  --post-data="" --header="Authorization: Token CmhBVsQYUbFazXimZj-K" https://network.pivotal.io/api/v2/products/vmware-tanzu-greenplum/releases/1226395/product_files/1392860/download
+
+#Copy the Downloaded GP file to all Segment
+--------------------------------------------------------
+scp /home/gpadmin/greenplum-db-6.23.0-rhel8-x86_64.rpm root@seg1:/home/gpadmin
+
+Same for Rest for HOST
+
+#Install Greenplum on Every Instance as root
+--------------------------------------------------------
+sudo yum install ./greenplum-db-6.23.0-rhel8-x86_64.rpm
+
+#Update the permissions for the new installation. For example, run this command as root to change the user and group of the installed files to gpadmin.
+--------------------------------------------------------
+
+sudo chown -R gpadmin:gpadmin /usr/local/greenplum*
+
+sudo chown -R gpadmin:gpadmin /home/gpadmin*
+
+sudo chown -R gpadmin:gpadmin /usr/local/greenplum-db-6.23.0
+
+#Edit the environment of the Greenplum Database superuser (gpadmin) and make sure you are sourcing the greenplum_path.sh file for the new installation. For example change the following line in the .bashrc or your chosen profile file:
+--------------------------------------------------------
+
+If you are sourcing a symbolic link (/usr/local/greenplum-db) in your profile files, update the link to point to the newly installed version. For example:
+--------------------------------------------------------
+
+rm /usr/local/greenplum-db
+
+ln -s /usr/local/greenplum-db-6.23.0 /usr/local/greenplum-db
+
+If needed, update the greenplum_path.sh file on the master and standby master hosts for use with your specific installation. These are some examples.
+--------------------------------------------------------
+If Greenplum Database uses LDAP authentication, edit the greenplum_path.sh file to add the line:
+export LDAPCONF=/etc/openldap/ldap.conf
+--------------------------------------------------------
+If Greenplum Database uses PL/Java, you might need to set or update the environment variables JAVA_HOME and LD_LIBRARY_PATH in greenplum_path.sh.
+--------------------------------------------------------
+Note: When comparing the previous and new greenplum_path.sh files, be aware that installing some Greenplum Database extensions also updates the greenplum_path.sh file. The greenplum_path.sh from the previous release might contain updates that were the result of installing those extensions.
+--------------------------------------------------------
+
+Use the Greenplum Database gppkg utility to re-install Greenplum Database extensions. If you were previously using any Greenplum Database extensions such as pgcrypto, PL/R, PL/Java, or PostGIS, download the corresponding packages from Pivotal Network, and install using this utility. See the extension documentation for details.
+Also copy any files that are used by the extensions (such as JAR files, shared object files, and libraries) from the previous version installation directory to the new version installation directory on the master and segment host systems.
+--------------------------------------------------------
+
+Source the environment file you just edited. For example:
+--------------------------------------------------------
+
+sudo source /usr/local/greenplum-db/greenplum_path.sh
+
+Or
+
+source ~/.bashrc
+
+After all segment hosts have been upgraded, log in as the gpadmin user and restart your Greenplum Database system:
+--------------------------------------------------------
+gpstart
+
+If you configured PXF in your previous Greenplum Database installation, you must re-initialize the PXF service after you upgrade Greenplum Database. Refer to Upgrading PXF for instructions.
+--------------------------------------------------------
+
+After all segment hosts have been upgraded, log in as the gpadmin user and restart your Greenplum Database system:
+--------------------------------------------------------
+gpstart
+
+
+#Verify the Updated Version
+--------------------------------------------------------
+gpstate -i
+
+else
+
+launch PSQL utility by executing "psql" command.
+
+select version();
+
+
+After upgrading Greenplum Database, ensure that all features work as expected. For example, test that backup and restore perform as expected, and Greenplum Database features such as user-defined functions, and extensions such as MADlib and PostGIS perform as expected.

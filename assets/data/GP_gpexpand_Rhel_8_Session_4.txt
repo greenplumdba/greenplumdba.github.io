@@ -1,0 +1,140 @@
+--------------------------------------------------------
+Session - 3_2
+--------------------------------------------------------
+
+Expanding a Greenplum System
+
+Add New Segment host (gpexpand)
+--------------------------------------------------------
+Hardware resources and configurations for new segment hosts should match those of the existing hosts.
+
+Ref :- https://gpdb.docs.pivotal.io/6-7/admin_guide/expand/expand-initialize.html
+
+#Adds and/or initializes a new segment host for a Greenplum Database system.
+--------------------------------------------------------
+
+Prepare the host as we did in the first session.
+
+Update the /etc/hosts file on all master and segment host with IP of Standby 
+
+#gpexpand
+--------------------------------------------------------
+Expands an existing Greenplum Database across new hosts in the system.
+
+Ref :- https://gpdb.docs.pivotal.io/6-3/utility_guide/ref/gpexpand.html
+
+--------------------------------------------------------
+1. Planning Greenplum System Expansion
+--------------------------------------------------------
+These utilities cannot be run while gpexpand is performing segment initialization.
+
+gpbackup
+gpcheckcat
+gpconfig
+gppkg
+gprestore
+
+Table redistribution is performed while the system is online. For many Greenplum systems, table redistribution completes in a single gpexpand session scheduled during a low-use period. Larger systems may require multiple sessions and setting the order of table redistribution to minimize performance impact. Complete the table redistribution in one session if possible.
+
+--------------------------------------------------------
+2. Preparing and Adding Hosts
+--------------------------------------------------------
+#Create a host file with the existing host names in your array and a separate host file with the new expansion host names. 
+
+seg5
+seg6
+
+#First perform the process as root, for administration convenience, and then as the user gpadmin, for management utilities. Perform the following tasks in order:
+--------------------------------------------------------
+To exchange SSH keys as root
+To create the gpadmin user
+To exchange SSH keys as the gpadmin user
+
+#Validating Disk I/O and Memory Bandwidth
+--------------------------------------------------------
+Run the gpcheckperf utility using the host file for new hosts. Use the -d option to specify the file systems you want to test on each host. You must have write access to these directories. For example:
+
+gpcheckperf -f new_hosts_file -d /data1 -d /data2 -v 
+
+
+--------------------------------------------------------
+3. Initializing New Segments
+--------------------------------------------------------
+
+Use the gpexpand utility to create and initialize the new segment instances and create the expansion schema.
+
+#Run gpexpand. The utility displays messages about how to prepare for an expansion operation, and it prompts you to quit or continue.
+Optionally, specify a hosts file using -f. For example:
+--------------------------------------------------------
+
+gpexpand -f /home/gpadmin/new_hosts_file
+
+/data1/primary
+/data2/primary
+
+These primary and mirror root directories for new segments must exist on the hosts, and the user running gpexpand must have permissions to create directories in them.
+After you have entered all required information, the utility generates an input file and saves it in the current directory. For example:
+
+#Use the interactive interview process to create your own input file unless your expansion scenario has atypical needs.
+--------------------------------------------------------
+The format for expansion input files is:
+
+hostname|address|port|datadir|dbid|content|preferred_role
+For example:
+
+sdw5|sdw5-1|50011|/gpdata/primary/gp9|11|9|p
+sdw5|sdw5-2|50012|/gpdata/primary/gp10|12|10|p
+sdw5|sdw5-2|60011|/gpdata/mirror/gp9|13|9|m
+sdw5|sdw5-1|60012|/gpdata/mirror/gp10|14|10|m
+
+--------------------------------------------------------
+4. Running gpexpand to Initialize New Segments
+--------------------------------------------------------
+
+To run gpexpand with an input file
+
+Log in on the master host as the user who will run your Greenplum Database system; 
+for example, gpadmin.
+
+Run the gpexpand utility, specifying the input file with -i. For example:
+
+gpexpand -i input_file (which was created in step 3)
+
+
+
+--------------------------------------------------------
+5. Monitoring the Cluster Expansion State
+--------------------------------------------------------
+
+At any time, you can check the state of cluster expansion by running the gpstate utility with the -x flag:
+
+gpstate -x
+
+
+
+--------------------------------------------------------
+6. Rolling Back a Failed Expansion Setup
+--------------------------------------------------------
+
+You can roll back an expansion setup operation (adding segment instances and segment hosts) only if the operation fails.
+
+If the expansion fails during the initialization step, while the database is down, you must first restart the database in master-only mode by running the gpstart -m command.
+
+Roll back the failed expansion with the following command:
+
+gpexpand --rollback
+
+
+--------------------------------------------------------
+7. Redistributing Tables Using gpexpand
+--------------------------------------------------------
+
+To redistribute tables with gpexpand
+
+Log in on the master host as the user who will run your Greenplum Database system, 
+
+for example, gpadmin.
+
+Run the gpexpand utility. You can use the -d or -e option to define the expansion session time period. For example, to run the utility for up to 60 consecutive hours:
+
+gpexpand -d 60:00:00

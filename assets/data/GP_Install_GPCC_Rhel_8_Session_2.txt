@@ -1,0 +1,52 @@
+--------------------------------------------------------
+Session - 2 
+--------------------------------------------------------
+
+#Install GPCC as root
+--------------------------------------------------------
+Install Guide - https://docs.vmware.com/en/VMware-Tanzu-Greenplum-Command-Center/6.7/tanzu-greenplum-command-center/GUID-topics-install.html
+
+Get it from - https://network.pivotal.io/products/gpdb-command-center 
+
+wget -O "greenplum-cc-web-6.7.2-gp6-rhel8-x86_64.zip"  --post-data="" --header="Authorization: Token zVzyueYsj_zG1_FydVid" https://network.pivotal.io/api/v2/products/gpdb-command-center/releases/1193256/product_files/1347171/download
+
+gpssh -f all_hosts -e 'mkdir -p /usr/local/greenplum-cc-6.7.2;sudo chown -R gpadmin:gpadmin /usr/local/greenplum-cc-6.7.2'
+gpssh -f all_hosts -e 'sudo ln -s /usr/local/greenplum-cc-6.7.2 /usr/local/greenplum-cc'
+
+unzip greenplum-cc-web-6.7.2-gp6-rhel8-x86_64.zip
+
+cd greenplum-cc-<version>
+./gpccinstall-<version> 
+
+source /usr/local/greenplum-cc/gpcc_path.sh
+
+Change as per Requirement 
+################################################
+
+Note: add to bashrc file so dont have to Execute again and again.
+
+vi ~/.bashrc
+vi ~/.bash_profile
+
+source /usr/local/greenplum-cc/gpcc_path.sh
+
+scp ~/.bashrc root@seg1:~/.bashrc
+scp ~/.bash_profile root@seg1:~/.bash_profile
+
+
+################################################
+
+#Start GPCC as GPADMIN
+--------------------------------------------------------
+gpcc start
+
+#Get GPMON Password from Below Command 
+--------------------------------------------------------
+more .pgpass
+
+Checkout for more details - https://docs.vmware.com/en/VMware-Tanzu-Greenplum-Command-Center/index.html
+
+
+
+
+

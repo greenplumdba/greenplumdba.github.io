@@ -1,0 +1,118 @@
+--------------------------------------------------------
+Session - 3
+--------------------------------------------------------
+
+Greenplum High Availability
+--------------------------------------------------------
+Greenplum Database supports highly available, fault-tolerant database services.
+when you configure Greenplum high availability features.
+
+https://docs.vmware.com/en/VMware-Tanzu-Greenplum/6/greenplum-database/GUID-best_practices-ha.html
+
+
+#Disk Storage
+--------------------------------------------------------
+With the Greenplum Database "shared-nothing" MPP architecture, the master host and segment hosts each have their own dedicated memory and disk storage, and each master or segment instance has its own independent data directory.
+
+#Master Mirroring
+--------------------------------------------------------
+The Greenplum Database master instance is clients' single point of access to the system. The master instance stores the global system catalog, the set of system tables that store metadata about the database instance, but no user data. If an unmirrored master instance fails or becomes inaccessible, the Greenplum instance is effectively off-line, since the entry point to the system has been lost. For this reason, a standby master must be ready to take over if the primary master fails.
+
+#Segment Mirroring
+--------------------------------------------------------
+Greenplum Database segment instances each store and manage a portion of the database data, with coordination from the master instance. If any unmirrored segment fails, the database may have to be shutdown and recovered, and transactions occurring after the most recent backup could be lost. Mirroring segments is, therefore, Mirroring segments are an essential element of a high availability solution.
+
+Group Mirroring
+--------------------------------------------------------
+Group mirroring is easiest to set up and is the default Greenplum mirroring configuration. It is least expensive to expand, since it can be done by adding as few as two hosts. There is no need to move mirrors after expansion to maintain a consistent mirror configuration.
+
+Spread Mirroring
+--------------------------------------------------------
+With spread mirroring, mirrors for each host's primary segments are spread across as many hosts as there are segments per host. Spread mirroring is easy to set up when the cluster is initialized, but requires that the cluster have at least one more host than there are segments per host.
+
+
+#Dual Clusters
+--------------------------------------------------------
+For some use cases, an additional level of redundancy can be provided by maintaining two Greenplum Database clusters that store the same data. The decision to implement dual clusters should be made with business requirements in mind.
+
+--------------------------------------------------------
+With Dual ETL, the ETL processes are performed twice, in parallel on each cluster, and validated each time. Dual ETL provides for a complete standby cluster with the same data. It also provides the capability to query the data on both clusters, doubling the processing throughput. The application can take advantage of both clusters as needed and also ensure that the ETL is successful and validated on both sides.
+--------------------------------------------------------
+
+#gpbackup & restore
+--------------------------------------------------------
+
+
+#Recovery & Rebalance
+--------------------------------------------------------
+Administrators perform the recovery while Greenplum Database is up and running by running the gprecoverseg utility. This utility locates the failed segments, verifies they are valid, and compares the transactional state with the currently active segment to determine changes made while the segment was offline. gprecoverseg synchronizes the changed database files with the active segment and brings the segment back online.
+
+
+postgres=# select * from gp_segment_configuration;
+ dbid | content | role | preferred_role | mode | status | port | hostname | address |              datadir               
+------+---------+------+----------------+------+--------+------+----------+---------+------------------------------------
+    1 |      -1 | p    | p              | n    | u      | 5432 | master   | master  | /home/gpadmin/data/master/gpseg-1
+    4 |       2 | p    | p              | s    | u      | 6000 | seg2     | seg2    | /home/gpadmin/data1/primary/gpseg2
+   12 |       2 | m    | m              | s    | u      | 7000 | seg3     | seg3    | /home/gpadmin/data1/mirror/gpseg2
+    5 |       3 | p    | p              | s    | u      | 6001 | seg2     | seg2    | /home/gpadmin/data2/primary/gpseg3
+   13 |       3 | m    | m              | s    | u      | 7001 | seg3     | seg3    | /home/gpadmin/data2/mirror/gpseg3
+    2 |       0 | p    | p              | s    | u      | 6000 | seg1     | seg1    | /home/gpadmin/data1/primary/gpseg0
+   10 |       0 | m    | m              | s    | u      | 7000 | seg2     | seg2    | /home/gpadmin/data1/mirror/gpseg0
+    3 |       1 | p    | p              | s    | u      | 6001 | seg1     | seg1    | /home/gpadmin/data2/primary/gpseg1
+   11 |       1 | m    | m              | s    | u      | 7001 | seg2     | seg2    | /home/gpadmin/data2/mirror/gpseg1
+    8 |       6 | m    | p              | n    | d      | 6000 | seg4     | seg4    | /home/gpadmin/data1/primary/gpseg6
+   16 |       6 | p    | m              | n    | u      | 7000 | seg1     | seg1    | /home/gpadmin/data1/mirror/gpseg6
+    9 |       7 | m    | p              | n    | d      | 6001 | seg4     | seg4    | /home/gpadmin/data2/primary/gpseg7
+   17 |       7 | p    | m              | n    | u      | 7001 | seg1     | seg1    | /home/gpadmin/data2/mirror/gpseg7
+    6 |       4 | p    | p              | n    | u      | 6000 | seg3     | seg3    | /home/gpadmin/data1/primary/gpseg4
+   14 |       4 | m    | m              | n    | d      | 7000 | seg4     | seg4    | /home/gpadmin/data1/mirror/gpseg4
+    7 |       5 | p    | p              | n    | u      | 6001 | seg3     | seg3    | /home/gpadmin/data2/primary/gpseg5
+   15 |       5 | m    | m              | n    | d      | 7001 | seg4     | seg4    | /home/gpadmin/data2/mirror/gpseg5
+(17 rows)
+
+
+
+postgres=# select * from gp_segment_configuration where status = 'd';
+ dbid | content | role | preferred_role | mode | status | port | hostname | address |              datadir               
+------+---------+------+----------------+------+--------+------+----------+---------+------------------------------------
+    8 |       6 | m    | p              | n    | d      | 6000 | seg4     | seg4    | /home/gpadmin/data1/primary/gpseg6
+    9 |       7 | m    | p              | n    | d      | 6001 | seg4     | seg4    | /home/gpadmin/data2/primary/gpseg7
+   14 |       4 | m    | m              | n    | d      | 7000 | seg4     | seg4    | /home/gpadmin/data1/mirror/gpseg4
+   15 |       5 | m    | m              | n    | d      | 7001 | seg4     | seg4    | /home/gpadmin/data2/mirror/gpseg5
+(4 rows)
+
+
+
+gpadmin@master:~$ psql -d template1 -c "select * from gp_configuration_history order by time desc limit 100;"
+             time              | dbid |                                     desc                                      
+-------------------------------+------+-------------------------------------------------------------------------------
+ 2022-02-13 23:05:10.526804-08 |    4 | FTS: update role, status, and mode for dbid 4 with contentid 0 to m, u, and s
+ 2022-02-13 23:05:10.526765-08 |    2 | FTS: update role, status, and mode for dbid 2 with contentid 0 to p, u, and s
+ 2022-02-13 23:03:08.037272-08 |    4 | FTS: update role, status, and mode for dbid 4 with contentid 0 to m, d, and n
+ 2022-02-13 23:03:08.037221-08 |    2 | FTS: update role, status, and mode for dbid 2 with contentid 0 to p, u, and n
+ 2022-02-13 22:50:46.328733-08 |    4 | FTS: update role, status, and mode for dbid 4 with contentid 0 to m, u, and s
+ 2022-02-13 22:50:46.328678-08 |    2 | FTS: update role, status, and mode for dbid 2 with contentid 0 to p, u, and s
+ 2022-02-13 22:50:46.328236-08 |    5 | FTS: update role, status, and mode for dbid 5 with contentid 1 to m, u, and s
+ 2022-02-13 22:50:46.328033-08 |    3 | FTS: update role, status, and mode for dbid 3 with contentid 1 to p, u, and s
+(8 rows)
+
+
+cd $MASTER_DATA_DIRECTORY/pg_log
+
+Perform Incremental Recovery - Anytime when load is less
+--------------------------------------------------------
+gprecoverseg -a 
+
+Perform Full Recovery - Need Downtime
+--------------------------------------------------------
+gprecoverseg -F
+
+Perform Rebalance - Take approvals from BU's as current Connection's will be dropped 
+--------------------------------------------------------
+gprecoverseg -r
+
+This operation will cancel queries that are currently executing.
+
+During the sync monitoring progress via
+--------------------------------------------------------
+gpstate -e

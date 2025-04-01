@@ -1,0 +1,17 @@
+--------------------------------------------------------
+Session - 2.1
+--------------------------------------------------------
+
+#Install GP Backup & Restore Utility
+--------------------------------------------------------
+Install Guide - https://docs.vmware.com/en/VMware-Tanzu-Greenplum-Backup-and-Restore/1.26/tanzu-greenplum-backup-and-restore/GUID-backup-restore-install.html
+
+Get it from - https://network.pivotal.io/products/pivotal-gpdb-backup-restore
+
+wget -O "pivotal_greenplum_backup_restore-1.26.0-gp6-rhel-x86_64.gppkg"  --post-data="" --header="Authorization: Token zVzyueYsj_zG1_FydVid" https://network.pivotal.io/api/v2/products/pivotal-gpdb-backup-restore/releases/1187543/product_files/1339676/download
+
+Use gppkg to install tools
+--------------------------------------------------------
+gppkg -i pivotal_greenplum_backup_restore-1.26.0-gp6-rhel-x86_64.gppkg
+
+Checkout for more details - https://docs.vmware.com/en/VMware-Tanzu-Greenplum-Backup-and-Restore/index.html

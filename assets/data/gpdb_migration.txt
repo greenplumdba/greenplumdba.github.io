@@ -1,0 +1,74 @@
+--------------------------------------------------------
+Greenplum Database Major Version Upgrade + Migration
+--------------------------------------------------------
+
+Checkout :- https://gpdb.docs.pivotal.io/6-9/install_guide/migrate.html
+
+Migrating Data from Greenplum 4.3 or 5 to Greenplum 6
+You can migrate data from Greenplum Database 4.3 or 5 to Greenplum 6 using the standard backup and restore procedures, gpbackup and gprestore, or by using gpcopy.
+
+A Greenplum 4 system must be at least version 4.3.22 to use the gpbackup and gprestore utilities. A Greenplum 5 system must be at least version 5.5. Be sure to use the latest release of the backup and restore utilities
+
+From                           To
+--------------------------------------------------------
+Greenplum Database 4.3.10.0 -> Greenplum Database 5.29.5
+Greenplum Database 4.3.10.0 -> Greenplum Database 6.23.0
+
+Backup Utility -> pivotal_greenplum_backup_restore-1.27.0
+
+--------------------------------------------------------
+Check all installed Utilites or tools
+--------------------------------------------------------
+gppkg --query --all
+
+--------------------------------------------------------
+Check configuration parameters 
+--------------------------------------------------------
+gpconfig -l
+or
+postgres.conf 
+
+--------------------------------------------------------
+The utility may take a while to perform the tests as it is copying very large files between the hosts. When it is finished you will see the summary results for the Disk Write, Disk Read, and Stream tests.
+--------------------------------------------------------
+
+gpcheckperf -f hostfile -r ds -D -d /home/gpadmin/data1/primary -d  /home/gpadmin/data2/primary -d /home/gpadmin/data1/mirror -d  /home/gpadmin/data2/mirror
+
+gpcheckperf -f hostfile -r N -d /tmp > subnet1.out
+
+
+First use gpbackup to create a --metadata-only backup from the source Greenplum database and restore it to the Greenplum 6 system. 
+--------------------------------------------------------
+Take Full backup ----
+--------------------------------------------------------
+gpbackup --backup-dir /mnt/hgfs/linuxshare --dbname rawdata --jobs 4        #The number of parallel connections to use when backing up data (default 1)
+
+--------------------------------------------------------
+Restore Full backup to target database version 5 ---
+--------------------------------------------------------
+gprestore --create-db --backup-dir /mnt/hgfs/linuxshare --timestamp 20230127234002
+
+--------------------------------------------------------
+Restore Full backup to target database version 6 ---
+--------------------------------------------------------
+gprestore --create-db --backup-dir /mnt/hgfs/linuxshare --timestamp 20230127234002 --resize-cluster --on-error-continue
+
+Review the gprestore log file for error messages and correct any remaining problems in the source Greenplum database.
+
+Note: 
+
+1. Migrate any tables you skipped during the restore using other methods, for example using the COPY TO command to create an external file and then loading the data from the external file into Greenplum 6 with the COPY FROM command.
+
+2. Recreate any objects you dropped in the Greenplum 4.3 or 5 database to enable migration, such as external tables, indexes, user-defined functions, or user-defined aggregates.
+
+3. Greenplum Database 5 and 6 remove automatic casts between the text type and other data types. After you migrate from Greenplum Database version 4.3 to version 6, this changed behavior may impact existing applications and queries.
+
+4. After migrating data you may need to modify SQL scripts, administration scripts, and user-defined functions as necessary to account for changes in Greenplum Database version 6.
+
+5. You may be using the gphdfs external table protocol in a Greenplum Database version 4 or 5 cluster to access data stored in Hadoop. Greenplum Database version 6 removes support for the gphdfs protocol.
+
+
+It's important to note that the above steps are a general guide and the exact process may vary depending on the specific versions of Greenplum and the amount of data being migrated. It's recommended to consult the Greenplum Database documentation or work with a Greenplum expert to ensure a smooth migration process.
+
+
+Before I go, I'd want to thank the Greenplum team for developing a database that functions on flexible hardware. Three clusters were operating simultaneously on a typical desktop PC. like a 18 virtual machine RHEL 8. Hats off to the VMware Team, RHEL, and AMD
