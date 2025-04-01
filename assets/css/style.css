@@ -64,6 +64,21 @@ code {
   }
 }
 
+/* Intro Section */
+    .intro {
+      margin-bottom: 2rem;
+    }
+    
+    .intro p {
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+    
+    .intro .lead {
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+
 /*--------------------------------------------------------------
 # Page Title
 --------------------------------------------------------------*/
