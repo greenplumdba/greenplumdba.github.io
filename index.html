@@ -1,139 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Greenplum DBA</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3939866347236032" crossorigin="anonymous"></script>
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/logo.png" rel="apple-touch-icon">
+  <meta name="description" content="Greenplum DBA Cheatsheet - Essential commands and tips for managing Greenplum Database">
+  <meta name="keywords" content="Greenplum, DBA, Database, PostgreSQL, Cheatsheet">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
-  <!-- Vendor CSS Files -->
-  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-<!-- Nice Admin -->
+  <!-- Favicons -->
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="assets/img/logo.png">
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+  <style>
+    :root {
+      --primary: #4154f1;
+      --primary-hover: #6776f4;
+      --text-dark: #012970;
+      --text-muted: #899bbd;
+      --bg-light: #f6f9ff;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "Open Sans", sans-serif;
+      background: var(--bg-light);
+      color: #444444;
+      line-height: 1.5;
+    }
+    a { color: var(--primary); text-decoration: none; transition: color 0.3s ease; }
+    a:hover { color: var(--primary-hover); }
+    h1, h2, h3, h4, h5, h6 { font-family: "Nunito", sans-serif; color: var(--text-dark); }
+    p { font-size: 14px; margin-bottom: 1rem; }
+    code, td { font-size: 12px; }
+    #main { margin-top: 60px; padding: 20px 30px; transition: all 0.3s ease; }
+    @media (max-width: 1199px) { #main { padding: 20px; } }
+    .card { margin-bottom: 1.5rem; border: none; border-radius: 5px; box-shadow: 0 0 30px rgba(1, 41, 112, 0.1); }
+    .card-body { padding: 1rem 1.25rem; }
+    .card-title { padding: 1rem 0 0.75rem; font-size: 14px; font-weight: 500; font-family: "Poppins", sans-serif; }
+    .header { position: fixed; top: 0; width: 100%; height: 60px; background: #fff; box-shadow: 0 2px 20px rgba(1, 41, 112, 0.1); padding-left: 20px; transition: all 0.5s ease; z-index: 997; display: flex; align-items: center; }
+    .sidebar { position: fixed; top: 60px; left: 0; bottom: 0; width: 300px; background: #fff; box-shadow: 0 0 20px rgba(1, 41, 112, 0.1); padding: 20px; overflow-y: auto; transition: all 0.3s ease; z-index: 996; }
+    @media (max-width: 1199px) { .sidebar { left: -300px; } .toggle-sidebar .sidebar { left: 0; } }
+    @media (min-width: 1200px) { #main, #footer { margin-left: 300px; } .toggle-sidebar #main, .toggle-sidebar #footer { margin-left: 0; } .toggle-sidebar .sidebar { left: -300px; } }
+    .footer { padding: 20px 0; font-size: 14px; border-top: 1px solid #cddfff; color: var(--text-dark); text-align: center; }
+    .alert p { margin-bottom: 0.5rem; }
+    .alert code { margin-bottom: 0.5rem; }
+  </style>
+
+  <!-- Async CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu|Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="assets/vendor/bootstrap-icons/bootstrap-icons.css" media="print" onload="this.media='all'">
+
+  <!-- Preload -->
+  <link rel="preload" href="assets/img/logo.png" as="image">
 </head>
 
 <body>
-
-  <!-- ======= Header ======= -->
-
-  <header id="header" class="header fixed-top d-flex align-items-center">
-    <div class="d-flex align-items-right justify-content-between">
-      <i class="bi bi-list toggle-sidebar-btn align-items-center"></i>&nbsp;&nbsp;
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
-        <span class="desktop-text" style="color: #012970; font-family: 'Ubuntu';">&nbsp;Greenplum DBA</span><span class="mobile-text" style="color: #012970; font-family: 'Ubuntu';">GPDBA</span>
+  <header id="header" class="header">
+    <div class="d-flex align-items-center">
+      <button class="toggle-sidebar-btn bi bi-list" aria-label="Toggle sidebar"></button>
+      <a href="/" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="Greenplum DBA Logo">
+        <span class="d-none d-md-inline" style="font-family: 'Ubuntu';">Greenplum DBA</span>
+        <span class="d-md-none" style="font-family: 'Ubuntu';">GPDBA</span>
       </a>
-    </div><!-- End Logo -->
-    <nav class="header-nav ms-auto">
-    </nav><!-- End Icons Navigation -->
-  </header><!-- End Header -->
-  
-  <script>
-    $(function () {
-      $("#sidebar").load("gpdb_aside.html");
-    });
-  </script>
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
+    </div>
+    <nav class="header-nav ms-auto"></nav>
+  </header>
 
-  </aside><!-- End Sidebar-->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchDataAndAppendmu();
-    });
-  </script>
+  <aside id="sidebar" class="sidebar"></aside>
 
   <main id="main" class="main">
     <div class="pagetitle">
       <h1>Greenplum CheatSheet</h1>
-      <hr>
-      <nav>
+      <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item active " aria-current="page">Dashboard</li>
         </ol>
       </nav>
-      <hr>
-    </div><!-- End Page Title -->
-    <section class="intro">
+    </div>
+
+    <section class="intro mb-4">
       <p class="lead">Greenplum Database is a powerful, open-source, massively parallel processing (MPP) database designed for large-scale data analytics.</p>
       <p>Built on PostgreSQL, Greenplum excels in handling big data workloads, providing businesses with high-performance, advanced analytics, and data warehousing solutions. It supports both structured and semi-structured data, enabling complex queries, machine learning, and real-time data analysis across petabyte-scale datasets.</p>
       <p>With its robust architecture, Greenplum distributes data and queries across multiple nodes, ensuring fast query execution and efficient data storage. It integrates seamlessly with popular data science tools and frameworks, making it a top choice for data engineers, analysts, and organizations looking to optimize data processing.</p>
     </section>
 
     <section class="section">
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="card">
+      <div class="row row-cols-1 row-cols-lg-2 g-4">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Getting Started</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
+              <div class="alert alert-primary">
                 <p>Switch and connect</p>
-                <hr>
-                <code>sudo -u postgres psql</code>
-                <br>
-                <hr>
+                <code class="d-block">sudo -u postgres psql</code>
                 <p>List all databases</p>
-                <hr>
-                <code>postgres=# \l</code>
-                <br>
-                <hr>
-                <p>Connect to the database named postgres</p>
-                <hr>
-                <code>postgres=# \c postgres</code>
-                <br>
-                <hr>
+                <code class="d-block">postgres=# \l</code>
+                <p>Connect to database 'postgres'</p>
+                <code class="d-block">postgres=# \c postgres</code>
                 <p>Disconnect</p>
-                <hr>
-                <code>postgres=# \q</code>
-                <br>
-                <code>postgres=# \!</code>
-                <hr>
+                <code class="d-block">postgres=# \q</code>
+                <code class="d-block">postgres=# \!</code>
               </div>
-              <h5 class="card-title">Getting help</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
-                <code>\h	Help on syntax of SQL commands</code>
-                <hr>
-                <code>\h DELETE	DELETE SQL statement syntax</code>
-                <hr>
-                <code>\?	List of PostgreSQL command</code>
-                <hr>
+              <h5 class="card-title">Getting Help</h5>
+              <div class="alert alert-primary">
+                <code class="d-block">\h - Help on SQL syntax</code>
+                <code class="d-block">\h DELETE - DELETE statement syntax</code>
+                <code class="d-block">\? - List PostgreSQL commands</code>
               </div>
-
             </div>
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
-              <h5 class="card-title">PSQL commands</h5>
-
-              <!-- Table with stripped rows -->
+              <h5 class="card-title">PSQL Commands</h5>
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -143,443 +127,207 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td><code>[-d] &lt;database&gt;</code></td>
-                    <td>psql -d mydb</td>
-                    <td>Connecting to database</td>
-                  </tr>
-                  <tr>
-                    <td><code>-U</code></td>
-                    <td>psql -U john mydb</td>
-                    <td>Connecting as a specific user</td>
-                  </tr>
-                  <tr>
-                    <td><code>-h</code> <code>-p</code></td>
-                    <td>psql -h localhost -p 5432 mydb</td>
-                    <td>Connecting to a host/port</td>
-                  </tr>
-                  <tr>
-                    <td><code>-U</code> <code>-h</code> <code>-p</code> <code>-d</code></td>
-                    <td>psql -U admin -h 192.168.1.5 -p 2506 -d mydb</td>
-                    <td>Connect remote PostgreSQL</td>
-                  </tr>
-                  <tr>
-                    <td><code>-W</code></td>
-                    <td>psql -W mydb</td>
-                    <td>Force password</td>
-                  </tr>
-                  <tr>
-                    <td><code>-c</code></td>
-                    <td>psql -c '\c postgres' -c '\dt'</td>
-                    <td>Execute a SQL query or command</td>
-                  </tr>
-                  <tr>
-                    <td><code>-H</code></td>
-                    <td>psql -c "\l+" -H postgres &gt; database.html</td>
-                    <td>Generate HTML report</td>
-                  </tr>
-                  <tr>
-                    <td><code>-l</code></td>
-                    <td>psql -l</td>
-                    <td>List all databases</td>
-                  </tr>
-                  <tr>
-                    <td><code>-f</code></td>
-                    <td>psql mydb -f file.sql</td>
-                    <td>Execute commands from a file</td>
-                  </tr>
-                  <tr>
-                    <td><code>-V</code></td>
-                    <td>psql -V</td>
-                    <td>Print the psql version</td>
-                  </tr>
+                  <tr><td><code>[-d] &lt;database&gt;</code></td><td>psql -d mydb</td><td>Connect to database</td></tr>
+                  <tr><td><code>-U</code></td><td>psql -U john mydb</td><td>Connect as user</td></tr>
+                  <tr><td><code>-h -p</code></td><td>psql -h localhost -p 5432 mydb</td><td>Connect to host/port</td></tr>
+                  <tr><td><code>-U -h -p -d</code></td><td>psql -U admin -h 192.168.1.5 -p 2506 -d mydb</td><td>Remote connection</td></tr>
+                  <tr><td><code>-W</code></td><td>psql -W mydb</td><td>Force password</td></tr>
+                  <tr><td><code>-c</code></td><td>psql -c '\c postgres' -c '\dt'</td><td>Execute SQL/command</td></tr>
+                  <tr><td><code>-H</code></td><td>psql -c "\l+" -H postgres > database.html</td><td>HTML report</td></tr>
+                  <tr><td><code>-l</code></td><td>psql -l</td><td>List databases</td></tr>
+                  <tr><td><code>-f</code></td><td>psql mydb -f file.sql</td><td>Execute from file</td></tr>
+                  <tr><td><code>-V</code></td><td>psql -V</td><td>Show version</td></tr>
                 </tbody>
               </table>
-              <!-- End Table with stripped rows -->
-
             </div>
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Database</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
-                <p>Show version</p>
-                <hr>
-                <code>SHOW SERVER_VERSION;</code>
-                <br>
-                <hr>
-                <p>Show system status</p>
-                <hr>
-                <code>\conninfo</code>
-                <br>
-                <hr>
-                <p>Show environmental variables</p>
-                <hr>
-                <code>SHOW ALL;</code>
-                <br>
-                <hr>
-                <p>List users</p>
-                <hr>
-                <code>SELECT rolname FROM pg_roles;</code>
-                <br>
-                <hr>
-                <p>Show current user</p>
-                <hr>
-                <code>SELECT current_user;</code>
-                <br>
-                <hr>
-                <p>Show current user's permissions</p>
-                <hr>
-                <code>\du</code>
-                <br>
-                <hr>
-                <p>Show current database</p>
-                <hr>
-                <code>SELECT current_database();</code>
-                <br>
-                <hr>
-                <p>Show all tables in database</p>
-                <hr>
-                <code>\dt</code>
-                <br>
-                <hr>
-                <p>List functions</p>
-                <hr>
-                <code>\df schema</code>
-                <hr>
+              <div class="alert alert-primary">
+                <p>Show version</p><code class="d-block">SHOW SERVER_VERSION;</code>
+                <p>Show system status</p><code class="d-block">\conninfo</code>
+                <p>Show environment variables</p><code class="d-block">SHOW ALL;</code>
+                <p>List users</p><code class="d-block">SELECT rolname FROM pg_roles;</code>
+                <p>Show current user</p><code class="d-block">SELECT current_user;</code>
+                <p>Show user permissions</p><code class="d-block">\du</code>
+                <p>Show current database</p><code class="d-block">SELECT current_database();</code>
+                <p>Show all tables</p><code class="d-block">\dt</code>
+                <p>List functions</p><code class="d-block">\df schema</code>
               </div>
             </div>
           </div>
         </div>
 
-
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Tables</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
-                <p>List tables, in current db</p>
-                <hr>
-                <code>\dt</code>
-                <br>
-                <code>SELECT table_schema,table_name FROM information_schema.tables ORDER BY table_schema,table_name;</code>
-                <br>
-                <hr>
-                <p>List tables, globally</p>
-                <hr>
-                <code>\dt *.*.</code>
-                <br>
-                <code>SELECT * FROM pg_catalog.pg_tables</code>
-                <br>
-                <hr>
+              <div class="alert alert-primary">
+                <p>List tables in current db</p>
+                <code class="d-block">\dt</code>
+                <code class="d-block">SELECT table_schema,table_name FROM information_schema.tables ORDER BY table_schema,table_name;</code>
+                <p>List tables globally</p>
+                <code class="d-block">\dt *.*.</code>
+                <code class="d-block">SELECT * FROM pg_catalog.pg_tables</code>
                 <p>List table schema</p>
-                <hr>
-                <code>\d table_name</code>
-                <br>
-                <code>\d+ table_name</code>
-                <br>
-                <code>SELECT column_name, data_type, character_maximum_length
-                  FROM INFORMATION_SCHEMA.COLUMNS
-                  WHERE table_name = 'table_name';</code>
-                <br>
-                <hr>
+                <code class="d-block">\d table_name</code>
+                <code class="d-block">\d+ table_name</code>
+                <code class="d-block">SELECT column_name, data_type, character_maximum_length FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'table_name';</code>
                 <p>Create table</p>
-                <hr>
-                <code>CREATE TABLE table_name(
-                  column_name column_type,
-                  column_name column_type
-                );</code>
-                <br>
-                <hr>
-                <p>Create table, with an auto-incrementing primary key</p>
-                <hr>
-                <code>CREATE TABLE table_name (
-                  column_name SERIAL PRIMARY KEY
-                );</code>
-                <br>
-                <hr>
+                <code class="d-block">CREATE TABLE table_name(column_name column_type, column_name column_type);</code>
+                <p>Create table with auto-incrementing PK</p>
+                <code class="d-block">CREATE TABLE table_name (column_name SERIAL PRIMARY KEY);</code>
                 <p>Delete table</p>
-                <hr>
-                <code>DROP TABLE IF EXISTS table_name CASCADE;</code>
-                <hr>
+                <code class="d-block">DROP TABLE IF EXISTS table_name CASCADE;</code>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Permissions</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
-                <p>Become the postgres user, if you have permission errors</p>
-                <hr>
-                <code>sudo su - postgres</code>
-                <br>
-                <code>psql</code>
-                <br>
-                <hr>
-                <p>Grant all permissions on database</p>
-                <hr>
-                <code>GRANT ALL PRIVILEGES ON DATABASE db_name TO user_name;</code>
-                <br>
-                <hr>
-                <p>Grant connection permissions on database</p>
-                <hr>
-                <code>GRANT CONNECT ON DATABASE db_name TO user_name;</code>
-                <br>
-                <hr>
-                <p>Grant permissions on schema</p>
-                <hr>
-                <code>GRANT USAGE ON SCHEMA public TO user_name;</code>
-                <br>
-                <hr>
-                <p>Grant permissions to functions</p>
-                <hr>
-                <code>GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO user_name;</code>
-                <br>
-                <hr>
-                <p>Grant permissions to select, update, insert, delete, on a all tables</p>
-                <hr>
-                <code>GRANT SELECT, UPDATE, INSERT ON ALL TABLES IN SCHEMA public TO user_name;</code>
-                <br>
-                <hr>
-                <p>Grant permissions, on a table</p>
-                <hr>
-                <code>GRANT SELECT, UPDATE, INSERT ON table_name TO user_name;</code>
-                <br>
-                <hr>
-                <p>Grant permissions, to select, on a table</p>
-                <hr>
-                <code>GRANT SELECT ON ALL TABLES IN SCHEMA public TO user_name;</code>
-                <hr>
+              <div class="alert alert-primary">
+                <p>Become postgres user</p>
+                <code class="d-block">sudo su - postgres</code>
+                <code class="d-block">psql</code>
+                <p>Grant all on database</p>
+                <code class="d-block">GRANT ALL PRIVILEGES ON DATABASE db_name TO user_name;</code>
+                <p>Grant connection</p>
+                <code class="d-block">GRANT CONNECT ON DATABASE db_name TO user_name;</code>
+                <p>Grant schema usage</p>
+                <code class="d-block">GRANT USAGE ON SCHEMA public TO user_name;</code>
+                <p>Grant function execution</p>
+                <code class="d-block">GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO user_name;</code>
+                <p>Grant CRUD on all tables</p>
+                <code class="d-block">GRANT SELECT, UPDATE, INSERT ON ALL TABLES IN SCHEMA public TO user_name;</code>
+                <p>Grant CRUD on table</p>
+                <code class="d-block">GRANT SELECT, UPDATE, INSERT ON table_name TO user_name;</code>
+                <p>Grant SELECT on all tables</p>
+                <code class="d-block">GRANT SELECT ON ALL TABLES IN SCHEMA public TO user_name;</code>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Columns</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
+              <div class="alert alert-primary">
                 <p>Add column</p>
-                <hr>
-                <code>ALTER TABLE table_name IF EXISTS
-                  ADD column_name data_type [constraints];</code>
-                <br>
-                <hr>
+                <code class="d-block">ALTER TABLE table_name IF EXISTS ADD column_name data_type [constraints];</code>
                 <p>Update column</p>
-                <hr>
-                <code>ALTER TABLE table_name IF EXISTS
-                  ALTER column_name TYPE data_type [constraints];</code>
-                <br>
-                <hr>
+                <code class="d-block">ALTER TABLE table_name IF EXISTS ALTER column_name TYPE data_type [constraints];</code>
                 <p>Delete column</p>
-                <hr>
-                <code>ALTER TABLE table_name IF EXISTS
-                  DROP column_name;</code>
-                <br>
-                <hr>
-                <p>Update column to be an auto-incrementing primary key</p>
-                <hr>
-                <code>ALTER TABLE table_name
-                  ADD COLUMN column_name SERIAL PRIMARY KEY;</code>
-                <br>
-                <hr>
-                <p>Insert into a table, with an auto-incrementing primary key</p>
-                <hr>
-                <code>INSERT INTO table_name
-                  VALUES (DEFAULT, value1);
-                </code>
-                <br>
-                <code>INSERT INTO table_name (column1_name,column2_name)
-                  VALUES ( value1,value2 );
-                </code>
-                <hr>
+                <code class="d-block">ALTER TABLE table_name IF EXISTS DROP column_name;</code>
+                <p>Add auto-incrementing PK</p>
+                <code class="d-block">ALTER TABLE table_name ADD COLUMN column_name SERIAL PRIMARY KEY;</code>
+                <p>Insert with auto-increment</p>
+                <code class="d-block">INSERT INTO table_name VALUES (DEFAULT, value1);</code>
+                <code class="d-block">INSERT INTO table_name (column1_name,column2_name) VALUES (value1,value2);</code>
               </div>
             </div>
           </div>
         </div>
 
-
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Data</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
-                <p>Select all data</p>
-                <hr>
-                <code>SELECT * FROM table_name;</code>
-                <br>
-                <hr>
-                <p>Read one row of data</p>
-                <hr>
-                <code>SELECT * FROM table_name LIMIT 1;</code>
-                <br>
-                <hr>
-                <p>Search for data</p>
-                <hr>
-                <code>SELECT * FROM table_name WHERE column_name = value;</code>
-                <br>
-                <hr>
-                <p>Insert data</p>
-                <hr>
-                <code>INSERT INTO table_name VALUES( value_1, value_2 );</code>
-                <br>
-                <hr>
-                <p>Update data</p>
-                <hr>
-                <code>UPDATE table_name
-                  SET column_1 = value_1, column_2 = value_2
-                  WHERE column_1 = value;
-                </code>
-                <br>
-                <hr>
-                <p>Delete all data</p>
-                <hr>
-                <code>DELETE FROM table_name;</code>
-                <br>
-                <hr>
-                <p>Delete specific data</p>
-                <code>DELETE FROM table_name
-                  WHERE column_name = value;</code>
-                <hr>
+              <div class="alert alert-primary">
+                <p>Select all data</p><code class="d-block">SELECT * FROM table_name;</code>
+                <p>Read one row</p><code class="d-block">SELECT * FROM table_name LIMIT 1;</code>
+                <p>Search data</p><code class="d-block">SELECT * FROM table_name WHERE column_name = value;</code>
+                <p>Insert data</p><code class="d-block">INSERT INTO table_name VALUES(value_1, value_2);</code>
+                <p>Update data</p><code class="d-block">UPDATE table_name SET column_1 = value_1, column_2 = value_2 WHERE column_1 = value;</code>
+                <p>Delete all data</p><code class="d-block">DELETE FROM table_name;</code>
+                <p>Delete specific data</p><code class="d-block">DELETE FROM table_name WHERE column_name = value;</code>
               </div>
             </div>
           </div>
         </div>
 
-
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Users</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
-                <p>List roles</p>
-                <hr>
-                <code>SELECT rolname FROM pg_roles;</code>
-                <br>
-                <hr>
-                <p>Create user</p>
-                <hr>
-                <code>CREATE USER user_name WITH PASSWORD 'password';</code>
-                <br>
-                <hr>
-                <p>Drop user</p>
-                <hr>
-                <code>DROP USER IF EXISTS user_name;</code>
-                <br>
-                <hr>
-                <p>Alter user password</p>
-                <hr>
-                <code>ALTER ROLE user_name WITH PASSWORD 'password';</code>
-                <hr>
+              <div class="alert alert-primary">
+                <p>List roles</p><code class="d-block">SELECT rolname FROM pg_roles;</code>
+                <p>Create user</p><code class="d-block">CREATE USER user_name WITH PASSWORD 'password';</code>
+                <p>Drop user</p><code class="d-block">DROP USER IF EXISTS user_name;</code>
+                <p>Alter user password</p><code class="d-block">ALTER ROLE user_name WITH PASSWORD 'password';</code>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Schema</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
+              <div class="alert alert-primary">
                 <p>List schemas</p>
-                <hr>
-                <code>\dn</code>
-                <br>
-                <code>SELECT schema_name FROM information_schema.schemata;</code>
-                <br>
-                <code>SELECT nspname FROM pg_catalog.pg_namespace;</code>
-                <br>
-                <hr>
-                <p>Create schema</p>
-                <hr>
-                <code>CREATE SCHEMA IF NOT EXISTS schema_name;</code>
-                <br>
-                <hr>
-                <p>Drop schema</p>
-                <hr>
-                <code>DROP SCHEMA IF EXISTS schema_name CASCADE;</code>
-                <hr>
+                <code class="d-block">\dn</code>
+                <code class="d-block">SELECT schema_name FROM information_schema.schemata;</code>
+                <code class="d-block">SELECT nspname FROM pg_catalog.pg_namespace;</code>
+                <p>Create schema</p><code class="d-block">CREATE SCHEMA IF NOT EXISTS schema_name;</code>
+                <p>Drop schema</p><code class="d-block">DROP SCHEMA IF EXISTS schema_name CASCADE;</code>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="card">
+        <div class="col">
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Dates</h5>
-              <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                <hr>
-                <p>Show current date YYYY-MM-DD</p>
-                <hr>
-                <code>SELECT current_date;</code>
-                <br>
-                <hr>
-                <p>Calculate age between two dates</p>
-                <hr>
-                <code>SELECT age(timestamp, timestamp);</code>
-                <br>
-                <hr>
-                <p>Show current time with time zone</p>
-                <hr>
-                <code>SELECT current_time;</code>
-                <br>
-                <hr>
-                <p>Make dates using integers</p>
-                <hr>
-                <code>SELECT make_date(2021,03,25);</code>
-                <hr>
+              <div class="alert alert-primary">
+                <p>Show current date</p><code class="d-block">SELECT current_date;</code>
+                <p>Calculate age</p><code class="d-block">SELECT age(timestamp, timestamp);</code>
+                <p>Show current time</p><code class="d-block">SELECT current_time;</code>
+                <p>Make date</p><code class="d-block">SELECT make_date(2021,03,25);</code>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </section>
+  </main>
 
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="copyright">
-      &copy; Copyright <strong><span>Greenplum DBA 2023</span></strong>. All Rights Reserved
+      © Copyright <strong><span>Greenplum DBA 2025</span></strong>. All Rights Reserved
     </div>
     <div class="credits">
-      Designed by <a href="https://www.linkedin.com/in/kishan-panchal-6004ab1b4/">@Kishan Panchal</a>&nbsp;&nbsp;<i class="bi bi-plus-square-fill"></i>&nbsp;  
-      With the help of ChatGPT by <img src="assets/img/icons8-chatgpt-24.png" alt="ChatGPT Icon"> OpenAI.
+      Designed by <a href="https://www.linkedin.com/in/kishan-panchal-6004ab1b4/">@Kishan Panchal</a>
+      with help from ChatGPT by <img src="assets/img/icons8-chatgpt-24.png" alt="ChatGPT" class="align-text-bottom"> OpenAI
     </div>
-  </footer><!-- End Footer -->
+  </footer>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-      class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center" aria-label="Back to top">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.min.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3939866347236032" crossorigin="anonymous"></script>
 
+  <script>
+    $(() => {
+      $("#sidebar").load("gpdb_aside.html", () => {
+        if (typeof fetchDataAndAppendmu === 'function') {
+          fetchDataAndAppendmu();
+        }
+      });
+    });
+  </script>
 </body>
-
 </html>
