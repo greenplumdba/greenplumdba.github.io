@@ -36,8 +36,22 @@
     <nav class="header-nav ms-auto"></nav>
   </header>
 
-  <aside id="sidebar" class="sidebar"></aside>
+  <!-- ======= Sidebar ======= -->
+  <script>
+    $(function(){
+      $("#sidebar").load("gpdb_aside.html");
+    });
+    </script>
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
 
+  </aside><!-- End Sidebar-->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchDataAndAppendmu();
+    });
+  </script>
+  
   <main id="main" class="main">
     <div class="pagetitle">
       <h1>Greenplum CheatSheet</h1>
@@ -284,14 +298,5 @@
   <script src="assets/js/main.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3939866347236032" crossorigin="anonymous"></script>
 
-  <script>
-    $(function () {
-      $("#sidebar").load("gpdb_aside.html", function() {
-        if (typeof fetchDataAndAppendmu === 'function') {
-          fetchDataAndAppendmu();
-        }
-      });
-    });
-  </script>
 </body>
 </html>
